@@ -35,6 +35,8 @@ export default function (part) {
   let backDart1Depth = options.backDartDepthFactor * measurements.waistToSeat
   let backDart2Depth =
     options.backDartDepthFactor * options.backDartReduction * measurements.waistToSeat
+  let dart1Point = backWaistCurve.shiftFractionAlong(0.5)
+  let dart2Distance = dart1Point.dist(points.backSideSeam) * options.backSidePositioning
   //Back Dart 1
   let curve1 = addDartToCurve(
     part,
@@ -49,13 +51,7 @@ export default function (part) {
   points.dart1Middle = curve1.dart.ops[1].to
   points.dart1End = curve1.dart.end()
   //Back Dart 2
-  let curve2 = addDartToCurve(
-    part,
-    curve1.right,
-    backWaistCurve.length() / 4,
-    dartSize,
-    backDart2Depth
-  )
+  let curve2 = addDartToCurve(part, curve1.right, dart2Distance, dartSize, backDart2Depth)
   waistLength += curve2.left.length()
   waistLength += curve2.right.length()
   let waistPath = curve1.left.join(
@@ -82,6 +78,8 @@ export default function (part) {
     .setRender(false)
 
   paths.bottom = new Path().move(points.sideHem).line(points.centreBackHem).setRender(false)
+  points.hemPointSide = points.sideHem.shift(270, options.hem)
+  points.hemPointcentreBack = points.centreBackHem.shift(270, options.hem)
 
   paths.seam = paths.seam = paths.sideSeam
     .clone()
@@ -92,9 +90,15 @@ export default function (part) {
 
   // Complete?
   if (complete) {
+    macro('cutonfold', {
+      from: points.centreBackWaist,
+      to: points.centreBackHem,
+      grainline: true
+    })
     if (sa) {
       paths.sa = new Path()
-        .move(points.centreBackHem)
+        .move(points.hemPointcentreBack)
+        .line(points.hemPointSide)
         .join(paths.sideSeam)
         .join(paths.waistSA)
         .offset(sa)
@@ -103,7 +107,7 @@ export default function (part) {
   }
 
   // Paperless?
-  if (paperless || true) {
+  if (paperless) {
     macro('hd', {
       from: points.dart1End,
       to: points.dart1Start,
@@ -120,6 +124,18 @@ export default function (part) {
       from: points.centreBackHem,
       to: points.sideHem,
       y: points.sideHem.y + 15
+    })
+
+    macro('hd', {
+      from: points.centreBackWaist,
+      to: points.dart1Middle,
+      y: points.centreBackWaist.y - sa - 25
+    })
+
+    macro('hd', {
+      from: points.backSideSeam,
+      to: points.dart2Middle,
+      y: points.backSideSeam.y - sa - 25
     })
 
     macro('vd', {

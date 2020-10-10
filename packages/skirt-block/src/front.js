@@ -78,6 +78,13 @@ export default function (part) {
     .setRender(false)
 
   paths.bottom = new Path().move(points.sideHem).line(points.centreFrontHem).setRender(false)
+  points.hemPointSide = points.sideHem.shift(270, options.hem)
+  points.hemPointcentreFront = points.centreFrontHem.shift(270, options.hem)
+
+  paths.hemLine = new Path()
+    .move(points.hemPointSide)
+    .line(points.hemPointcentreFront)
+    .setRender(false)
 
   paths.centerFront = new Path()
     .move(points.centreFrontHem)
@@ -94,26 +101,25 @@ export default function (part) {
 
   // Complete?
   if (complete) {
-    // points.logo = points.topLeft.shiftFractionTowards(points.bottomRight, 0.5)
-    // snippets.logo = new Snippet('logo', points.logo)
-    // points.text = points.logo
-    //   .shift(-90, w / 8)
-    //   .attr('data-text', 'hello')
-    //   .attr('data-text-class', 'center')
+    macro('cutonfold', {
+      from: points.centreFrontHem,
+      to: points.centreFrontWaist,
+      grainline: true
+    })
 
     if (sa) {
       paths.sa = new Path()
         .move(points.centreFrontWaist)
         .join(paths.waistFSA)
         .join(paths.sideSeam)
-        .join(paths.bottom)
+        .join(paths.hemLine)
         .offset(sa)
         .attr('class', 'fabric sa')
     }
   }
 
   // Paperless?
-  if (paperless || true) {
+  if (paperless) {
     macro('hd', {
       from: points.frontSideSeam,
       to: points.centreFrontWaist,
@@ -129,19 +135,25 @@ export default function (part) {
     macro('hd', {
       from: points.sideHem,
       to: points.centreFrontHem,
-      y: points.sideHem.y + 10
+      y: points.sideHem.y + sa + 10
+    })
+
+    macro('hd', {
+      from: points.frontDartMiddle,
+      to: points.frontSideSeam,
+      y: points.frontSideSeam.y - sa - 25
     })
 
     macro('vd', {
       from: points.centreFrontWaist,
       to: points.centreFrontHem,
-      x: points.centreFrontWaist.x + 15
+      x: points.centreFrontWaist.x + sa + 25
     })
 
     macro('vd', {
       from: points.frontDartEnd,
       to: points.frontDartMiddle,
-      x: points.sideSeat.x - 15
+      x: points.sideSeat.x - +sa + 15
     })
   }
 

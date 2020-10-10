@@ -17,7 +17,8 @@ const App = (props) => {
     'options.skirt-block.backDartDepthFactor.title': 'Centre Backdart Depth Factor',
     'options.skirt-block.backDartReduction.title': 'Side Backdart Reduction',
     'options.skirt-block.frontDartDepthFactor.title': 'Frontdart Depth Factor',
-    'options.skirt-block.seatEase.description': 'Seat Ease',
+    'options.skirt-block.seatEase.title': 'Seat Ease',
+    'options.skirt-block.backSidePositioning.title': 'Back side dart Positioning'
   }
   
 

@@ -9,8 +9,6 @@ export default {
   code: 'enyachoke',
   department: 'womenswear',
   type: 'block',
-  margin: 15,
-  sa: 10,
   difficulty: 3,
   tags: [
     'freesewing',
@@ -24,18 +22,17 @@ export default {
     'sewing pattern'
   ],
   optionGroups: {
-    fit: ['backDartDepthFactor', 'frontDartDepthFactor', 'backDartReduction', 'seatEase']
+    fit: [
+      'backDartDepthFactor',
+      'frontDartDepthFactor',
+      'backDartReduction',
+      'seatEase',
+      'hem',
+      'hemBonus'
+    ],
+    style: ['backSidePositioning']
   },
-  measurements: [
-    'waistToKnee',
-    'waistToHips',
-    'hips',
-    'waist',
-    'waistBack',
-    'seat',
-    'seatBack',
-    'waistToSeat'
-  ],
+  measurements: ['waistToKnee', 'waist', 'seat', 'waistToSeat'],
   dependencies: {},
   inject: {
     back: 'base',
@@ -49,6 +46,10 @@ export default {
     backDartDepthFactor: { pct: 60, min: 35, max: 70 },
     frontDartDepthFactor: { pct: 45, min: 30, max: 65 },
     backDartReduction: { pct: 80, min: 50, max: 80 },
-    seatEase: { pct: 3, min: 2, max: 4 }
+    backSidePositioning: { pct: 40, min: 30, max: 60 },
+    seatEase: { pct: 3, min: 2, max: 4 },
+    lengthBonus: { pct: 0, min: -50, max: 50 },
+    hemBonus: { pct: 0, min: -35, max: 0 },
+    hem: { mm: 25, min: 0, max: 75 }
   }
 }
